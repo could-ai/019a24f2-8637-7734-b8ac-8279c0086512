@@ -34,7 +34,7 @@ class Constants {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         shadowColor: Colors.black26,
       ),
-      buttonTheme: const ButtonThemeData(
+      buttonTheme: ButtonThemeData(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
       inputDecorationTheme: InputDecorationTheme(

@@ -14,6 +14,7 @@ import 'screens/profile_screen.dart';
 import 'screens/notifications_screen.dart';
 import 'utils/constants.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'integrations/supabase.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,9 +32,9 @@ class IQCenterApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AuthProvider()),
-        ChangeNotifierProvider(create: (_) => DeviceProvider()),
-        ChangeNotifierProvider(create: (_) => NotificationProvider()),
+        ChangeNotifierProvider(create: (_) =&gt; AuthProvider()),
+        ChangeNotifierProvider(create: (_) =&gt; DeviceProvider()),
+        ChangeNotifierProvider(create: (_) =&gt; NotificationProvider()),
       ],
       child: MaterialApp(
         title: 'IQ CENTER',
@@ -43,14 +44,14 @@ class IQCenterApp extends StatelessWidget {
         themeMode: ThemeMode.system,
         initialRoute: '/login',
         routes: {
-          '/login': (context) => const LoginScreen(),
-          '/': (context) => const HomeScreen(),
-          '/devices': (context) => const DevicesScreen(),
-          '/control': (context) => const ControlScreen(),
-          '/library': (context) => const LibraryScreen(),
-          '/settings': (context) => const SettingsScreen(),
-          '/profile': (context) => const ProfileScreen(),
-          '/notifications': (context) => const NotificationsScreen(),
+          '/login': (context) =&gt; const LoginScreen(),
+          '/': (context) =&gt; const HomeScreen(),
+          '/devices': (context) =&gt; const DevicesScreen(),
+          '/control': (context) =&gt; const ControlScreen(),
+          '/library': (context) =&gt; const LibraryScreen(),
+          '/settings': (context) =&gt; const SettingsScreen(),
+          '/profile': (context) =&gt; const ProfileScreen(),
+          '/notifications': (context) =&gt; const NotificationsScreen(),
         },
       ),
     );

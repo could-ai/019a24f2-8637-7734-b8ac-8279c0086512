@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
+import '../utils/constants.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State&lt;LoginScreen&gt; createState() =&gt; _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State&lt;LoginScreen&gt; {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
 
-  Future<void> _login() async {
-    setState(() => _isLoading = true);
-    final authProvider = context.read<AuthProvider>();
+  Future&lt;void&gt; _login() async {
+    setState(() =&gt; _isLoading = true);
+    final authProvider = context.read&lt;AuthProvider&gt;();
     final success = await authProvider.signIn(_emailController.text, _passwordController.text);
-    setState(() => _isLoading = false);
+    setState(() =&gt; _isLoading = false);
     if (success) {
       Navigator.pushReplacementNamed(context, '/');
     } else {
@@ -94,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const SizedBox(height: 16),
                       TextButton(
-                        onPressed: () => Navigator.pushNamed(context, '/register'),
+                        onPressed: () =&gt; Navigator.pushNamed(context, '/register'),
                         child: const Text('Create Account'),
                       ),
                     ],
