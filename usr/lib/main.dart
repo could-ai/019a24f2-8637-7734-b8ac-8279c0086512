@@ -27,7 +27,7 @@ class IQCenterApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: const ColorScheme(
+          colorScheme: ColorScheme(
             brightness: Brightness.light,
             primary: Colors.blue,
             onPrimary: Colors.white,
