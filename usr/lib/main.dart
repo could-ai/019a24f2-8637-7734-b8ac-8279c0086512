@@ -1,15 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'providers/auth_provider.dart';
 import 'providers/device_provider.dart';
+import 'providers/notification_provider.dart';
+import 'screens/login_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/devices_screen.dart';
 import 'screens/control_screen.dart';
 import 'screens/library_screen.dart';
 import 'screens/settings_screen.dart';
+import 'screens/profile_screen.dart';
+import 'screens/notifications_screen.dart';
 import 'utils/constants.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Supabase.initialize(
+    url: SupabaseConfig.supabaseUrl,
+    anonKey: SupabaseConfig.supabaseAnonKey,
+  );
   runApp(const IQCenterApp());
 }
 
@@ -20,48 +31,26 @@ class IQCenterApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => DeviceProvider()),
+        ChangeNotifierProvider(create: (_) => NotificationProvider()),
       ],
       child: MaterialApp(
         title: 'IQ CENTER',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme(
-            brightness: Brightness.light,
-            primary: Colors.blue,
-            onPrimary: Colors.white,
-            secondary: Colors.blueAccent,
-            onSecondary: Colors.white,
-            error: Colors.red,
-            onError: Colors.white,
-            background: Colors.white,
-            onBackground: Colors.black,
-            surface: Colors.grey[100]!,
-            onSurface: Colors.black,
-          ),
-          textTheme: GoogleFonts.robotoTextTheme(),
-          appBarTheme: const AppBarTheme(
-            backgroundColor: Colors.blue,
-            foregroundColor: Colors.white,
-          ),
-        ),
-        darkTheme: ThemeData(
-          useMaterial3: true,
-          colorScheme: const ColorScheme.dark(
-            primary: Colors.blueAccent,
-            secondary: Colors.blue,
-          ),
-          textTheme: GoogleFonts.robotoTextTheme(ThemeData.dark().textTheme),
-        ),
+        theme: Constants.getLightTheme(),
+        darkTheme: Constants.getDarkTheme(),
         themeMode: ThemeMode.system,
-        initialRoute: '/',
+        initialRoute: '/login',
         routes: {
+          '/login': (context) => const LoginScreen(),
           '/': (context) => const HomeScreen(),
           '/devices': (context) => const DevicesScreen(),
           '/control': (context) => const ControlScreen(),
           '/library': (context) => const LibraryScreen(),
           '/settings': (context) => const SettingsScreen(),
+          '/profile': (context) => const ProfileScreen(),
+          '/notifications': (context) => const NotificationsScreen(),
         },
       ),
     );

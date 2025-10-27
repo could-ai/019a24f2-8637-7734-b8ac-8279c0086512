@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
 import '../providers/device_provider.dart';
 import '../widgets/device_card.dart';
@@ -15,6 +16,10 @@ class HomeScreen extends StatelessWidget {
         centerTitle: true,
         actions: [
           IconButton(
+            icon: const Icon(Icons.notifications),
+            onPressed: () => Navigator.pushNamed(context, '/notifications'),
+          ),
+          IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () => Navigator.pushNamed(context, '/settings'),
           ),
@@ -25,7 +30,7 @@ class HomeScreen extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: [
             const DrawerHeader(
-              decoration: BoxDecoration(color: Colors.blue),
+              decoration: BoxDecoration(color: Constants.primaryColor),
               child: Text('Menu', style: TextStyle(color: Colors.white, fontSize: 24)),
             ),
             ListTile(
@@ -36,6 +41,10 @@ class HomeScreen extends StatelessWidget {
               title: const Text('Library'),
               onTap: () => Navigator.pushNamed(context, '/library'),
             ),
+            ListTile(
+              title: const Text('Profile'),
+              onTap: () => Navigator.pushNamed(context, '/profile'),
+            ),
           ],
         ),
       ),
@@ -44,7 +53,7 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Welcome to IQ CENTER', style: Theme.of(context).textTheme.headlineMedium),
+            Text(Constants.welcomeMessage, style: Theme.of(context).textTheme.headlineMedium),
             const SizedBox(height: 20),
             Expanded(
               child: Consumer<DeviceProvider>(
@@ -65,7 +74,7 @@ class HomeScreen extends StatelessWidget {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Icon(Icons.add, size: 48, color: Colors.blue),
+                                  Icon(Icons.add, size: 48, color: Constants.primaryColor),
                                   Text('Add Device'),
                                 ],
                               ),
@@ -74,7 +83,10 @@ class HomeScreen extends StatelessWidget {
                         );
                       }
                       final device = connectedDevices[index - 1];
-                      return DeviceCard(device: device);
+                      return Hero(
+                        tag: 'device-${device.id}',
+                        child: DeviceCard(device: device),
+                      );
                     },
                   );
                 },
@@ -86,7 +98,7 @@ class HomeScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.read<DeviceProvider>().scanDevices(),
         child: const Icon(Icons.search),
-        tooltip: 'Scan for Devices',
+        tooltip: Constants.scanTooltip,
       ),
     );
   }

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../models/device.dart';
 import '../utils/mock_data.dart';
+import '../integrations/supabase.dart';
 
 class DeviceProvider with ChangeNotifier {
   List<Device> _devices = [];
@@ -29,7 +31,6 @@ class DeviceProvider with ChangeNotifier {
   }
 
   Future<void> connectToDevice(Device device) async {
-    // Mock connection via MAC address
     final updatedDevice = device.copyWith(isConnected: true);
     _devices = _devices.map((d) => d.id == device.id ? updatedDevice : d).toList();
     notifyListeners();
@@ -44,27 +45,30 @@ class DeviceProvider with ChangeNotifier {
 
   Future<void> sendControlCommand(String command) async {
     if (_selectedDevice == null) return;
-    // Mock API call for control (e.g., shutdown, launch game)
-    final url = 'https://mock-api.example.com/control'; // Placeholder
+    // Use Edge Function for secure command sending
+    final url = '${SupabaseConfig.supabaseUrl}/functions/v1/control-command';
     try {
       final response = await http.post(
         Uri.parse(url),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${SupabaseConfig.supabaseAnonKey}',
+        },
         body: jsonEncode({
           'macAddress': _selectedDevice!.macAddress,
           'command': command,
         }),
       );
-      // Handle response (mocked)
-      print('Command sent: $command');
+      if (response.statusCode == 200) {
+        print('Command sent successfully');
+      }
     } catch (e) {
-      print('Error: $e'); // TODO: Show error in UI
+      print('Error: $e');
     }
   }
 
   Future<Map<String, dynamic>> getSystemInfo() async {
     if (_selectedDevice == null) return {};
-    // Mock system monitoring data
     return MockData.getMockSystemInfo(_selectedDevice!.id);
   }
 }

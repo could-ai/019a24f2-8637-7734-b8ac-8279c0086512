@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/device_provider.dart';
 import '../widgets/monitoring_chart.dart';
+import '../widgets/virtual_keyboard.dart';
 
 class ControlScreen extends StatefulWidget {
   const ControlScreen({super.key});
@@ -37,7 +38,21 @@ class _ControlScreenState extends State<ControlScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Text('MAC: ${device.macAddress}', style: Theme.of(context).textTheme.bodyLarge),
+            Hero(
+              tag: 'device-${device.id}',
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      Icon(Icons.computer, size: 48, color: device.isConnected ? Colors.green : Colors.grey),
+                      Text(device.name, style: Theme.of(context).textTheme.titleLarge),
+                      Text('MAC: ${device.macAddress}', style: Theme.of(context).textTheme.bodyLarge),
+                    ],
+                  ),
+                ),
+              ),
+            ),
             const SizedBox(height: 20),
             MonitoringChart(data: _systemInfo),
             const SizedBox(height: 20),
@@ -59,6 +74,8 @@ class _ControlScreenState extends State<ControlScreen> {
               onPressed: () => Navigator.pushNamed(context, '/library'),
               child: const Text('Launch Game'),
             ),
+            const SizedBox(height: 20),
+            const VirtualKeyboard(),
           ],
         ),
       ),

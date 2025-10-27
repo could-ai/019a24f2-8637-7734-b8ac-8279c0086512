@@ -15,18 +15,24 @@ class DevicesScreen extends StatelessWidget {
           if (provider.isScanning) {
             return const Center(child: CircularProgressIndicator());
           }
-          return ListView.builder(
-            itemCount: provider.devices.length,
-            itemBuilder: (context, index) {
-              final device = provider.devices[index];
-              return DeviceCard(
-                device: device,
-                onTap: () {
-                  provider.setSelectedDevice(device);
-                  Navigator.pushNamed(context, '/control');
-                },
-              );
-            },
+          return RefreshIndicator(
+            onRefresh: provider.scanDevices,
+            child: ListView.builder(
+              itemCount: provider.devices.length,
+              itemBuilder: (context, index) {
+                final device = provider.devices[index];
+                return Hero(
+                  tag: 'device-${device.id}',
+                  child: DeviceCard(
+                    device: device,
+                    onTap: () {
+                      provider.setSelectedDevice(device);
+                      Navigator.pushNamed(context, '/control');
+                    },
+                  ),
+                );
+              },
+            ),
           );
         },
       ),
